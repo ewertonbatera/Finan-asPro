@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Finança Pro - Controle Financeiro</title>
+    <title>Finança Pro - Receitas & Despesas</title>
     <!-- Chart.js CDN para gráficos avançados -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <!-- Font Awesome 6 (ícones profissionais) -->
@@ -54,9 +54,42 @@
         }
 
         .container {
-            max-width: 1300px;
+            max-width: 1400px;
             margin: 32px auto;
             padding: 0 24px;
+        }
+
+        /* Abas para alternar entre Despesas e Receitas */
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #5b7a9a;
+            cursor: pointer;
+            border-radius: 40px;
+            transition: all 0.2s;
+            box-shadow: none;
+        }
+        .tab-btn i {
+            margin-right: 8px;
+        }
+        .tab-btn.active {
+            background: #1e4a6e;
+            color: white;
+            box-shadow: 0 4px 12px rgba(30,74,110,0.3);
+        }
+        .tab-btn:not(.active):hover {
+            background: #e2edf2;
+            color: #0f3b4c;
         }
 
         /* Card de formulário */
@@ -104,8 +137,7 @@
             color: #4b6a8b;
             letter-spacing: 0.5px;
         }
-
-        input {
+input, select {
             padding: 12px 16px;
             border-radius: 16px;
             border: 1.5px solid #e2e8f0;
@@ -116,7 +148,7 @@
             width: 100%;
         }
 
-        input:focus {
+        input:focus, select:focus {
             border-color: #2c9c5c;
             box-shadow: 0 0 0 3px rgba(44, 156, 92, 0.2);
         }
@@ -145,20 +177,27 @@
             transform: translateY(-2px);
         }
 
-        .btn-paid-action {
+        .btn-income {
+            background: #3b82f6;
+            color: white;
+        }
+        .btn-income:hover {
+            background: #2563eb;
+        }
+
+        .btn-paid-action, .btn-income-action {
             background: #3b82f6;
             color: white;
             border-radius: 40px;
             padding: 6px 14px;
             font-size: 0.8rem;
         }
-
-        .btn-paid-action:hover {
+        .btn-paid-action:hover, .btn-income-action:hover {
             background: #2563eb;
             transform: scale(1.02);
         }
 
-        /* cards de resumo */
+        /* cards de resumo expandidos */
         .resumo-grid {
             display: flex;
             flex-wrap: wrap;
@@ -171,7 +210,7 @@
             border-radius: 28px;
             padding: 20px 24px;
             flex: 1;
-            min-width: 180px;
+            min-width: 170px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             border-bottom: 4px solid;
             transition: 0.2s;
@@ -191,10 +230,12 @@
             font-weight: 800;
             color: #1e293b;
         }
+        .saldo-positivo { color: #2c9c5c; }
+        .saldo-negativo { color: #ef4444; }
 
-        .card-total { border-bottom-color: #3b82f6; }
-        .card-pago { border-bottom-color: #2c9c5c; }
-        .card-pendente { border-bottom-color: #ef4444; }
+        .card-total-despesa { border-bottom-color: #ef4444; }
+        .card-total-receita { border-bottom-color: #3b82f6; }
+        .card-saldo { border-bottom-color: #f59e0b; }
 
         /* tabela responsiva */
         .table-wrapper {
@@ -209,7 +250,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 560px;
+            min-width: 620px;
         }
 
         th {
@@ -246,7 +287,8 @@
             background: #ffe4e2;
             color: #b91c1c;
         }
-
+.income-row td:first-child i { color: #3b82f6; }
+        .expense-row td:first-child i { color: #ef4444; }
         .paid-row td:not(:last-child) {
             text-decoration: line-through;
             opacity: 0.75;
@@ -266,7 +308,7 @@
             color: #b91c1c;
         }
 
-        /* gráficos lado a lado */
+        /* gráficos */
         .charts-container {
             display: flex;
             flex-wrap: wrap;
@@ -279,7 +321,7 @@
             border-radius: 28px;
             padding: 20px;
             flex: 1;
-            min-width: 260px;
+            min-width: 280px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
             text-align: center;
         }
@@ -309,7 +351,7 @@
             .form-row {
                 flex-direction: column;
             }
-            .btn-primary {
+            .tabs {
                 justify-content: center;
             }
         }
@@ -321,347 +363,389 @@
         <i class="fas fa-coins"></i> 
         Finança Pro
     </h1>
-    <p>Controle inteligente • Organize suas contas • Acompanhe gráficos</p>
+    <p>Receitas + Despesas • Fluxo de caixa completo • Gráficos inteligentes</p>
 </header>
 
 <div class="container">
-    <!-- Painel de Resumo Rápido -->
+    <!-- Painel de Resumo Avançado -->
     <div class="resumo-grid" id="resumoPanel">
-        <div class="card-resumo card-total">
-            <h3><i class="fas fa-chart-line"></i> Total Geral</h3>
-            <div class="valor-resumo" id="totalGeral">R$ 0,00</div>
+        <div class="card-resumo card-total-receita">
+            <h3><i class="fas fa-arrow-up"></i> Total Receitas</h3>
+            <div class="valor-resumo" id="totalReceitas">R$ 0,00</div>
         </div>
-        <div class="card-resumo card-pago">
-            <h3><i class="fas fa-check-circle"></i> Total Pago</h3>
-            <div class="valor-resumo" id="totalPagoResumo">R$ 0,00</div>
+        <div class="card-resumo card-total-despesa">
+            <h3><i class="fas fa-arrow-down"></i> Total Despesas</h3>
+            <div class="valor-resumo" id="totalDespesas">R$ 0,00</div>
         </div>
-        <div class="card-resumo card-pendente">
-            <h3><i class="fas fa-hourglass-half"></i> Pendente</h3>
-            <div class="valor-resumo" id="totalPendenteResumo">R$ 0,00</div>
+        <div class="card-resumo card-saldo">
+            <h3><i class="fas fa-wallet"></i> Saldo Líquido</h3>
+            <div class="valor-resumo" id="saldoLiquido">R$ 0,00</div>
         </div>
     </div>
 
-    <!-- Formulário de Adicionar Conta (profissional) -->
-    <div class="card-form">
+    <!-- Abas -->
+    <div class="tabs">
+        <button class="tab-btn active" id="tabDespesasBtn"><i class="fas fa-shopping-cart"></i> Despesas (Contas)</button>
+        <button class="tab-btn" id="tabReceitasBtn"><i class="fas fa-hand-holding-usd"></i> Receitas (Salário/Entradas)</button>
+    </div>
+
+    <!-- Formulário Dinâmico (Despesas) -->
+    <div class="card-form" id="formDespesas">
         <div class="form-title">
             <i class="fas fa-plus-circle" style="color:#2c9c5c;"></i> 
-            Nova Conta / Despesa
+            Nova Despesa / Conta a Pagar
         </div>
         <div class="form-row">
             <div class="input-group">
                 <label><i class="fas fa-tag"></i> Descrição</label>
-                <input type="text" id="nome" placeholder="Ex: Internet, Aluguel, Academia" autocomplete="off">
+                <input type="text" id="nomeDespesa" placeholder="Ex: Aluguel, Internet, Luz" autocomplete="off">
             </div>
             <div class="input-group">
                 <label><i class="fas fa-calendar-alt"></i> Vencimento</label>
-                <input type="date" id="data">
+                <input type="date" id="dataDespesa">
             </div>
             <div class="input-group">
                 <label><i class="fas fa-dollar-sign"></i> Valor (R$)</label>
-                <input type="number" id="valor" step="0.01" placeholder="0,00">
+<input type="number" id="valorDespesa" step="0.01" placeholder="0,00">
             </div>
             <div class="input-group">
-                <button class="btn-primary" id="btnAdicionar">
-                    <i class="fas fa-save"></i> Adicionar Conta
+                <button class="btn-primary" id="btnAddDespesa">
+                    <i class="fas fa-save"></i> Adicionar Despesa
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Tabela de contas -->
+    <!-- Formulário Dinâmico (Receitas) -->
+    <div class="card-form" id="formReceitas" style="display:none;">
+        <div class="form-title">
+            <i class="fas fa-hand-holding-usd" style="color:#3b82f6;"></i> 
+            Nova Receita (Salário / Entrada)
+        </div>
+        <div class="form-row">
+            <div class="input-group">
+                <label><i class="fas fa-tag"></i> Descrição</label>
+                <input type="text" id="nomeReceita" placeholder="Ex: Salário, Freelance, Bonus" autocomplete="off">
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-calendar-alt"></i> Data Recebimento</label>
+                <input type="date" id="dataReceita">
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-dollar-sign"></i> Valor (R$)</label>
+                <input type="number" id="valorReceita" step="0.01" placeholder="0,00">
+            </div>
+            <div class="input-group">
+                <button class="btn-primary btn-income" id="btnAddReceita">
+                    <i class="fas fa-plus-circle"></i> Adicionar Receita
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabela dinâmica (despesas ou receitas) -->
     <div class="table-wrapper">
-        <table>
-            <thead>
-                <tr><th>Descrição</th><th>Vencimento</th><th>Valor (R$)</th><th>Status</th><th>Ações</th></tr>
+        <table id="dynamicTable">
+            <thead id="tableHeader">
+                <!-- Cabeçalho será alterado via JS -->
+                <tr><th>Descrição</th><th>Data</th><th>Valor (R$)</th><th>Status</th><th>Ações</th></tr>
             </thead>
-            <tbody id="listaContas">
-                <!-- linhas dinâmicas via JS -->
-                <tr><td colspan="5" style="text-align:center;">Nenhuma conta cadastrada. Adicione uma!</td></tr>
+            <tbody id="listaMovimentos">
+                <tr><td colspan="5" style="text-align:center;">Carregando...</td></tr>
             </tbody>
         </table>
     </div>
 
-    <!-- Gráficos lado a lado: Donut + Barras Evolução (simulando categorias mensais) -->
+    <!-- Gráficos lado a lado -->
     <div class="charts-container">
         <div class="chart-card">
-            <h3><i class="fas fa-chart-pie"></i> Situação Financeira</h3>
-            <canvas id="graficoDonut" width="400" height="250" style="max-width:100%; height:auto;"></canvas>
+            <h3><i class="fas fa-chart-pie"></i> Receitas vs Despesas</h3>
+            <canvas id="graficoComparativo" width="400" height="250" style="max-width:100%; height:auto;"></canvas>
         </div>
         <div class="chart-card">
-            <h3><i class="fas fa-chart-bar"></i> Comparativo: Pago vs Pendente</h3>
-            <canvas id="graficoBarra" width="400" height="250" style="max-width:100%; height:auto;"></canvas>
+            <h3><i class="fas fa-chart-line"></i> Evolução Financeira</h3>
+            <canvas id="graficoBarraSaldo" width="400" height="250" style="max-width:100%; height:auto;"></canvas>
         </div>
     </div>
     <div class="footer-note">
-        <i class="fas fa-database"></i> Dados salvos automaticamente no seu navegador • Marque como pago e veja os gráficos atualizarem
+        <i class="fas fa-database"></i> Dados salvos automaticamente • Receitas e despesas separadas • Marque despesas como pagas para controle de fluxo
     </div>
 </div>
 
 <script>
-    // ----- Variáveis Globais e storage -----
-    let contas = [];
+    // Estruturas de dados
+    let despesas = [];   // { nome, data, valor, pago }
+    let receitas = [];   // { nome, data, valor }
+
+    let abaAtiva = "despesas"; // 'despesas' ou 'receitas'
 
     // Carregar do localStorage
     function carregarDados() {
-        const stored = localStorage.getItem('financas_pro');
-        if (stored) {
-            contas = JSON.parse(stored);
-        } else {
-            // Dados de exemplo para demonstração profissional (opcional mas elegante)
-            contas = [
+        const storedDespesas = localStorage.getItem('financas_despesas');
+        const storedReceitas = localStorage.getItem('financas_receitas');
+        
+        if (storedDespesas) despesas = JSON.parse(storedDespesas);
+        else {
+            // Dados de exemplo
+            despesas = [
                 { nome: "Aluguel", data: "2025-03-10", valor: 1850.00, pago: false },
                 { nome: "Netflix", data: "2025-03-15", valor: 45.90, pago: true },
                 { nome: "Energia", data: "2025-03-20", valor: 230.50, pago: false },
                 { nome: "Supermercado", data: "2025-03-05", valor: 780.30, pago: true }
             ];
-            salvarDados();
         }
+        
+        if (storedReceitas) receitas = JSON.parse(storedReceitas);
+else {
+            receitas = [
+                { nome: "Salário Março", data: "2025-03-01", valor: 5200.00 },
+                { nome: "Freelance Design", data: "2025-03-12", valor: 850.00 }
+            ];
+        }
+        salvarTudo();
+    }
+
+    function salvarTudo() {
+        localStorage.setItem('financas_despesas', JSON.stringify(despesas));
+        localStorage.setItem('financas_receitas', JSON.stringify(receitas));
+    }
+
+    // Cálculos totais
+    function calcularTotais() {
+        const totalReceitas = receitas.reduce((acc, r) => acc + r.valor, 0);
+        const totalDespesas = despesas.reduce((acc, d) => acc + d.valor, 0);
+        const despesasPagas = despesas.filter(d => d.pago).reduce((acc, d) => acc + d.valor, 0);
+        const despesasPendentes = totalDespesas - despesasPagas;
+        const saldoLiquido = totalReceitas - totalDespesas;
+        return { totalReceitas, totalDespesas, saldoLiquido, despesasPagas, despesasPendentes };
+    }
+
+    function atualizarCards() {
+        const { totalReceitas, totalDespesas, saldoLiquido } = calcularTotais();
+        document.getElementById('totalReceitas').innerHTML = R$ ${totalReceitas.toFixed(2)};
+        document.getElementById('totalDespesas').innerHTML = R$ ${totalDespesas.toFixed(2)};
+        const saldoElem = document.getElementById('saldoLiquido');
+        saldoElem.innerHTML = R$ ${saldoLiquido.toFixed(2)};
+        if (saldoLiquido >= 0) saldoElem.classList.add('saldo-positivo');
+        else saldoElem.classList.add('saldo-negativo');
+    }
+
+    // Renderizar tabela de acordo com a aba ativa
+    function renderizarTabela() {
+        const tbody = document.getElementById('listaMovimentos');
+        const thead = document.getElementById('tableHeader');
+        
+        if (abaAtiva === 'despesas') {
+            thead.innerHTML = <tr><th>Descrição</th><th>Vencimento</th><th>Valor (R$)</th><th>Status</th><th>Ações</th></tr>;
+            if (despesas.length === 0) {
+                tbody.innerHTML = <tr><td colspan="5" style="text-align:center;">Nenhuma despesa cadastrada. Adicione uma!</td></tr>;
+                return;
+            }
+            let html = '';
+            despesas.forEach((d, idx) => {
+                const dataFormat = d.data ? new Date(d.data).toLocaleDateString('pt-BR') : 'Sem data';
+                const statusClass = d.pago ? 'status-paid' : 'status-pending';
+                const statusText = d.pago ? 'Pago' : 'Pendente';
+                const rowClass = d.pago ? 'paid-row' : 'expense-row';
+                html += <tr class="${rowClass}">
+                            <td><i class="fas ${d.pago ? 'fa-check-circle' : 'fa-exclamation-triangle'}" style="margin-right:8px; color:${d.pago ? '#2c9c5c' : '#ef4444'}"></i> ${escapeHtml(d.nome)}</td>
+                            <td>${dataFormat}</td>
+                            <td>R$ ${d.valor.toFixed(2)}</td>
+                            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                            <td style="display: flex; gap: 8px; justify-content: center;">
+                                <button class="btn-paid-action" onclick="togglePagarDespesa(${idx})" title="${d.pago ? 'Desmarcar pagamento' : 'Marcar como paga'}">
+                                    <i class="fas ${d.pago ? 'fa-undo-alt' : 'fa-check'}"></i> ${d.pago ? 'Desmarcar' : 'Pagar'}
+                                </button>
+                                <button class="delete-btn" onclick="excluirItem('despesa', ${idx})" title="Remover"><i class="fas fa-trash-alt"></i></button>
+                            </td>
+                         </tr>;
+            });
+            tbody.innerHTML = html;
+        } 
+        else { // Aba receitas
+            thead.innerHTML = <tr><th>Descrição</th><th>Data Recebimento</th><th>Valor (R$)</th><th></th><th>Ações</th></tr>;
+if (receitas.length === 0) {
+                tbody.innerHTML = <tr><td colspan="5" style="text-align:center;">Nenhuma receita cadastrada. Adicione salário ou entrada!</td></tr>;
+                return;
+            }
+            let html = '';
+            receitas.forEach((r, idx) => {
+                const dataFormat = r.data ? new Date(r.data).toLocaleDateString('pt-BR') : 'Sem data';
+                html += <tr class="income-row">
+                            <td><i class="fas fa-arrow-up" style="color:#3b82f6; margin-right:8px;"></i> ${escapeHtml(r.nome)}</td>
+                            <td>${dataFormat}</td>
+                            <td style="color:#2c9c5c; font-weight:600;">R$ ${r.valor.toFixed(2)}</td>
+                            <td><span class="status-badge" style="background:#e0f2fe; color:#0369a1;">Recebido</span></td>
+                            <td><button class="delete-btn" onclick="excluirItem('receita', ${idx})" title="Remover receita"><i class="fas fa-trash-alt"></i></button></td>
+                         </tr>;
+            });
+            tbody.innerHTML = html;
+        }
+    }
+
+    // Funções CRUD para despesas e receitas
+    function adicionarDespesa() {
+        const nome = document.getElementById('nomeDespesa').value.trim();
+        const data = document.getElementById('dataDespesa').value;
+        const valor = parseFloat(document.getElementById('valorDespesa').value);
+        if (!nome  !data  isNaN(valor) || valor <= 0) {
+            alert('Preencha todos os campos da despesa corretamente.');
+            return;
+        }
+        despesas.push({ nome, data, valor, pago: false });
+        salvarTudo();
+        limparCamposDespesa();
         renderizarTudo();
     }
 
-    function salvarDados() {
-        localStorage.setItem('financas_pro', JSON.stringify(contas));
-    }
-
-    // ----- Funções auxiliares de cálculo -----
-    function calcularTotais() {
-        let totalGeral = 0, totalPago = 0, totalPendente = 0;
-        for (const c of contas) {
-            totalGeral += c.valor;
-            if (c.pago) totalPago += c.valor;
-            else totalPendente += c.valor;
-        }
-        return { totalGeral, totalPago, totalPendente };
-    }
-
-    function atualizarCardsResumo() {
-        const { totalGeral, totalPago, totalPendente } = calcularTotais();
-        document.getElementById('totalGeral').innerHTML = `R$ ${totalGeral.toFixed(2)}`;
-        document.getElementById('totalPagoResumo').innerHTML = `R$ ${totalPago.toFixed(2)}`;
-        document.getElementById('totalPendenteResumo').innerHTML = `R$ ${totalPendente.toFixed(2)}`;
-    }
-
-    // ---- Renderização da tabela com design profissional e classe paid ----
-    function renderizarTabela() {
-        const tbody = document.getElementById('listaContas');
-        if (!contas.length) {
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 40px;"><i class="fas fa-receipt"></i> Nenhuma conta cadastrada. Clique em "Adicionar Conta"</td></tr>`;
+    function adicionarReceita() {
+        const nome = document.getElementById('nomeReceita').value.trim();
+        const data = document.getElementById('dataReceita').value;
+        const valor = parseFloat(document.getElementById('valorReceita').value);
+        if (!nome  !data  isNaN(valor) || valor <= 0) {
+            alert('Preencha todos os campos da receita (salário/entrada).');
             return;
         }
-
-        let html = '';
-        contas.forEach((conta, idx) => {
-            const dataFormatada = conta.data ? new Date(conta.data).toLocaleDateString('pt-BR') : 'Sem data';
-            const statusClass = conta.pago ? 'status-paid' : 'status-pending';
-            const statusText = conta.pago ? 'Pago' : 'Pendente';
-            const rowClass = conta.pago ? 'paid-row' : '';
-            html += `<tr class="${rowClass}">
-                        <td><i class="fas ${conta.pago ? 'fa-check-circle' : 'fa-circle-exclamation'}" style="margin-right:8px; color:${conta.pago ? '#2c9c5c' : '#f97316'}"></i> ${escapeHtml(conta.nome)}</td>
-                        <td>${dataFormatada}</td>
-                        <td>R$ ${conta.valor.toFixed(2)}</td>
-                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                        <td style="display: flex; gap: 8px; justify-content: center;">
-                            <button class="btn-paid-action" onclick="alternarPago(${idx})" title="Alternar status de pagamento">
-                                <i class="fas ${conta.pago ? 'fa-undo-alt' : 'fa-check'}"></i> ${conta.pago ? 'Desmarcar' : 'Pagar'}
-                            </button>
-                            <button class="delete-btn" onclick="excluirConta(${idx})" title="Remover conta">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </td>
-                     </tr>`;
-        });
-        tbody.innerHTML = html;
+        receitas.push({ nome, data, valor });
+        salvarTudo();
+        limparCamposReceita();
+        renderizarTudo();
     }
 
-    // pequeno helper para evitar XSS
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-            return c;
-        });
-    }
-
-    // ----- Gráficos profissionais (Chart.js) -----
-    let donutChart = null;
-    let barChart = null;
-
-    function destruirGraficos() {
-        if (donutChart) {
-            donutChart.destroy();
-            donutChart = null;
+    window.togglePagarDespesa = function(index) {
+        if (index >= 0 && index < despesas.length) {
+            despesas[index].pago = !despesas[index].pago;
+            salvarTudo();
+            renderizarTudo();
         }
-        if (barChart) {
-            barChart.destroy();
-            barChart = null;
+    };
+
+    window.excluirItem = function(tipo, index) {
+        if (tipo === 'despesa') {
+            if (confirm('Remover esta despesa permanentemente?')) {
+                despesas.splice(index, 1);
+                salvarTudo();
+                renderizarTudo();
+            }
+        } else if (tipo === 'receita') {
+            if (confirm('Remover esta receita permanentemente?')) {
+                receitas.splice(index, 1);
+                salvarTudo();
+                renderizarTudo();
+            }
         }
+    };
+
+    function limparCamposDespesa() {
+        document.getElementById('nomeDespesa').value = '';
+        document.getElementById('dataDespesa').value = '';
+        document.getElementById('valorDespesa').value = '';
     }
+    function limparCamposReceita() {
+        document.getElementById('nomeReceita').value = '';
+        document.getElementById('dataReceita').value = '';
+        document.getElementById('valorReceita').value = '';
+    }
+
+    // Gráficos
+    let comparativoChart = null;
+    let barraSaldoChart = null;
 
     function atualizarGraficos() {
-        const { totalPago, totalPendente } = calcularTotais();
-        const ctxDonut = document.getElementById('graficoDonut').getContext('2d');
-        const ctxBar = document.getElementById('graficoBarra').getContext('2d');
+        const { totalReceitas, totalDespesas, saldoLiquido } = calcularTotais();
+        const ctxPie = document.getElementById('graficoComparativo').getContext('2d');
+        const ctxBar = document.getElementById('graficoBarraSaldo').getContext('2d');
+if (comparativoChart) comparativoChart.destroy();
+        if (barraSaldoChart) barraSaldoChart.destroy();
         
-        // Destruir instâncias antigas para evitar conflitos
-        if (donutChart) donutChart.destroy();
-        if (barChart) barChart.destroy();
-        
-        // Gráfico Donut (Pizza com furo) mais moderno
-        donutChart = new Chart(ctxDonut, {
+        comparativoChart = new Chart(ctxPie, {
             type: 'doughnut',
             data: {
-                labels: ['Contas Pagas', 'Contas Pendentes'],
-                datasets: [{
-                    data: [totalPago, totalPendente],
-                    backgroundColor: ['#2c9c5c', '#ef4444'],
-                    borderColor: 'white',
-                    borderWidth: 2,
-                    hoverOffset: 8,
-                    borderRadius: 10,
-                    spacing: 3
-                }]
+                labels: ['Receitas Totais', 'Despesas Totais'],
+                datasets: [{ data: [totalReceitas, totalDespesas], backgroundColor: ['#3b82f6', '#ef4444'], borderWidth: 2, borderRadius: 8 }]
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: { position: 'bottom', labels: { font: { size: 12, weight: 'bold' }, color: '#1e293b' } },
-                    tooltip: { callbacks: { label: (ctx) => `${ctx.label}: R$ ${ctx.raw.toFixed(2)}` } }
-                },
-                cutout: '60%'
-            }
+            options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: (ctx) => ${ctx.label}: R$ ${ctx.raw.toFixed(2)} } } } }
         });
-
-        // Gráfico de Barras - Comparativo visual mais robusto
-        barChart = new Chart(ctxBar, {
+        
+        // Gráfico de barras comparando receitas vs despesas (visual forte)
+        barraSaldoChart = new Chart(ctxBar, {
             type: 'bar',
             data: {
-                labels: ['Financeiro'],
+                labels: ['Fluxo Financeiro'],
                 datasets: [
-                    {
-                        label: 'Total Pago (R$)',
-                        data: [totalPago],
-                        backgroundColor: '#2c9c5c',
-                        borderRadius: 12,
-                        barPercentage: 0.6,
-                        categoryPercentage: 0.8
-                    },
-                    {
-                        label: 'Total Pendente (R$)',
-                        data: [totalPendente],
-                        backgroundColor: '#ef4444',
-                        borderRadius: 12,
-                        barPercentage: 0.6
-                    }
+                    { label: 'Receitas (Entradas)', data: [totalReceitas], backgroundColor: '#3b82f6', borderRadius: 12 },
+                    { label: 'Despesas (Saídas)', data: [totalDespesas], backgroundColor: '#ef4444', borderRadius: 12 },
+                    { label: 'Saldo Líquido', data: [saldoLiquido], backgroundColor: '#f59e0b', borderRadius: 12 }
                 ]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 10 } },
-                    tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: R$ ${ctx.raw.toFixed(2)}` } }
-                },
-                scales: {
-                    y: { beginAtZero: true, title: { display: true, text: 'Valor (R$)', color: '#475569' }, grid: { color: '#e2e8f0' } },
-                    x: { title: { display: true, text: 'Status Consolidado', color: '#475569' } }
-                }
+                plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: (ctx) => ${ctx.dataset.label}: R$ ${ctx.raw.toFixed(2)} } } },
+                scales: { y: { beginAtZero: true, title: { display: true, text: 'Valor (R$)' } } }
             }
         });
     }
 
-    // ---- Função principal de renderização completa (cards, tabela, gráficos) ----
     function renderizarTudo() {
-        atualizarCardsResumo();
+        atualizarCards();
         renderizarTabela();
         atualizarGraficos();
     }
 
-    // ---- CRUD e interações ----
-    function adicionarConta() {
-        const nomeInput = document.getElementById('nome');
-        const dataInput = document.getElementById('data');
-        const valorInput = document.getElementById('valor');
+    // Alternância de abas
+    function configurarAbas() {
+        const tabDesp = document.getElementById('tabDespesasBtn');
+        const tabReceitas = document.getElementById('tabReceitasBtn');
+        const formDesp = document.getElementById('formDespesas');
+        const formRec = document.getElementById('formReceitas');
         
-        let nome = nomeInput.value.trim();
-        const data = dataInput.value;
-        let valor = parseFloat(valorInput.value);
-        
-        if (!nome) {
-            alert('⚠️ Por favor, informe a descrição da conta.');
-            return;
-        }
-        if (!data) {
-            alert('📅 Selecione uma data de vencimento.');
-            return;
-        }
-        if (isNaN(valor) || valor <= 0) {
-            alert('💰 Informe um valor válido (maior que zero).');
-            return;
-        }
-        
-        // Limpeza e adição
-        contas.push({
-            nome: nome,
-            data: data,
-            valor: valor,
-            pago: false
+        tabDesp.addEventListener('click', () => {
+            abaAtiva = 'despesas';
+            tabDesp.classList.add('active');
+            tabReceitas.classList.remove('active');
+            formDesp.style.display = 'block';
+            formRec.style.display = 'none';
+            renderizarTabela();
         });
-        salvarDados();
-        // Limpar campos
-        nomeInput.value = '';
-        dataInput.value = '';
-        valorInput.value = '';
-        renderizarTudo();
-        // Feedback visual sutil
-        const btn = document.getElementById('btnAdicionar');
-        btn.style.transform = 'scale(0.97)';
-        setTimeout(() => btn.style.transform = '', 150);
+        tabReceitas.addEventListener('click', () => {
+            abaAtiva = 'receitas';
+            tabReceitas.classList.add('active');
+            tabDesp.classList.remove('active');
+            formDesp.style.display = 'none';
+            formRec.style.display = 'block';
+            renderizarTabela();
+        });
     }
 
-    window.alternarPago = function(index) {
-        if (index >= 0 && index < contas.length) {
-            contas[index].pago = !contas[index].pago;
-            salvarDados();
-            renderizarTudo();
-        }
-    };
-    
-    window.excluirConta = function(index) {
-        if (confirm('Tem certeza que deseja excluir esta conta permanentemente?')) {
-            contas.splice(index, 1);
-            salvarDados();
-            renderizarTudo();
-        }
-    };
-    
-    // Evento de tecla Enter no campo valor (usabilidade)
-    function setupEventos() {
-        const btnAdd = document.getElementById('btnAdicionar');
-        btnAdd.addEventListener('click', adicionarConta);
-        
-        const inputs = ['nome', 'data', 'valor'];
-        inputs.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) {
-                el.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') adicionarConta();
-                });
-            }
+    function initEventos() {
+        document.getElementById('btnAddDespesa').addEventListener('click', adicionarDespesa);
+        document.getElementById('btnAddReceita').addEventListener('click', adicionarReceita);
+        // Enter nos campos
+        const inputsDesp = ['nomeDespesa', 'dataDespesa', 'valorDespesa'];
+        inputsDesp.forEach(id => {
+            document.getElementById(id)?.addEventListener('keypress', (e) => { if (e.key === 'Enter') adicionarDespesa(); });
+        });
+        const inputsRec = ['nomeReceita', 'dataReceita', 'valorReceita'];
+        inputsRec.forEach(id => {
+            document.getElementById(id)?.addEventListener('keypress', (e) => { if (e.key === 'Enter') adicionarReceita(); });
         });
     }
-    
-    // Inicialização
+
     function init() {
         carregarDados();
-        setupEventos();
-        // Caso não tenha dados, garantir que exemplo já foi carregado no carregarDados
+        configurarAbas();
+        initEventos();
+        renderizarTudo();
+        // garantir que formulário padrão seja despesas
+        document.getElementById('formReceitas').style.display = 'none';
+        document.getElementById('formDespesas').style.display = 'block';
     }
     
+    function escapeHtml(str) {
+        if(!str) return '';
+        return str.replace(/[&<>]/g, function(m) { if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m; });
+    }
+
     init();
 </script>
 </body>
