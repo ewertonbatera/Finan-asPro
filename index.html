@@ -314,60 +314,6 @@
             text-align: center;
         }
 
-        /* Perfil do usuário */
-        .profile-section {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border-radius: 28px;
-            padding: 24px 28px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-            color: white;
-        }
-
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .profile-avatar {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #22c55e, #3b82f6);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            font-weight: bold;
-            color: white;
-        }
-
-        .profile-info {
-            flex: 1;
-        }
-
-        .profile-info input {
-            background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-            margin-top: 8px;
-        }
-
-        .profile-info input::placeholder {
-            color: rgba(255,255,255,0.6);
-        }
-
-        .profile-info input:focus {
-            border-color: #22c55e;
-        }
-
-        .btn-save-profile {
-            background: #22c55e;
-            color: white;
-        }
-
         .charts-container {
             display: flex;
             flex-wrap: wrap;
@@ -416,10 +362,6 @@
             .tabs {
                 justify-content: center;
             }
-            .profile-header {
-                flex-direction: column;
-                text-align: center;
-            }
         }
     </style>
 </head>
@@ -429,7 +371,7 @@
         <i class="fas fa-coins"></i> 
         Finança Pro
     </h1>
-    <p>Despesas com ícones visuais • Receitas • Gráficos • Perfil personalizado</p>
+    <p>Despesas com ícones visuais • Receitas • Gráficos • Controle total</p>
 </header>
 
 <div class="container">
@@ -544,26 +486,6 @@
         </table>
     </div>
 
-    <!-- SEÇÃO DE PERFIL DO USUÁRIO -->
-    <div class="profile-section" id="profileSection">
-        <div class="profile-header">
-            <div class="profile-avatar" id="userAvatar">
-                <i class="fas fa-user"></i>
-            </div>
-            <div class="profile-info">
-                <h3><i class="fas fa-id-card"></i> Meu Perfil</h3>
-                <input type="text" id="userName" placeholder="Seu nome" style="width: 100%; max-width: 300px;">
-                <input type="email" id="userEmail" placeholder="Seu e-mail (opcional)" style="width: 100%; max-width: 300px; margin-top: 8px;">
-                <div style="margin-top: 12px;">
-                    <button id="btnSaveProfile" class="btn-save-profile"><i class="fas fa-save"></i> Salvar Perfil</button>
-                </div>
-            </div>
-            <div>
-                <small><i class="fas fa-user-check"></i> Seus dados ficam salvos no navegador</small>
-            </div>
-        </div>
-    </div>
-
     <div class="charts-container">
         <div class="chart-card">
             <h3><i class="fas fa-chart-pie"></i> Receitas vs Despesas</h3>
@@ -575,7 +497,7 @@
         </div>
     </div>
     <div class="footer-note">
-        <i class="fas fa-database"></i> Dados salvos automaticamente • Ícones visuais para cada despesa • Seu perfil personalizado
+        <i class="fas fa-database"></i> Dados salvos automaticamente • Ícones visuais para cada despesa • Organize suas finanças
     </div>
 </div>
 
@@ -584,7 +506,6 @@
     let despesas = [];
     let receitas = [];
     let abaAtiva = "despesas";
-    let perfilUsuario = { nome: "", email: "" };
 
     let comparativoChart = null;
     let barraSaldoChart = null;
@@ -606,7 +527,6 @@
     function carregarDados() {
         const storedDespesas = localStorage.getItem('financas_despesas_icones');
         const storedReceitas = localStorage.getItem('financas_receitas_pro');
-        const storedPerfil = localStorage.getItem('financas_perfil_usuario');
         
         if (storedDespesas) {
             despesas = JSON.parse(storedDespesas);
@@ -629,24 +549,11 @@
                 { nome: "Freelance Design", data: "2025-03-12", valor: 850.00 }
             ];
         }
-        
-        if (storedPerfil) {
-            perfilUsuario = JSON.parse(storedPerfil);
-            document.getElementById('userName').value = perfilUsuario.nome || '';
-            document.getElementById('userEmail').value = perfilUsuario.email || '';
-        }
     }
 
     function salvarDados() {
         localStorage.setItem('financas_despesas_icones', JSON.stringify(despesas));
         localStorage.setItem('financas_receitas_pro', JSON.stringify(receitas));
-    }
-
-    function salvarPerfil() {
-        perfilUsuario.nome = document.getElementById('userName').value;
-        perfilUsuario.email = document.getElementById('userEmail').value;
-        localStorage.setItem('financas_perfil_usuario', JSON.stringify(perfilUsuario));
-        alert('Perfil salvo com sucesso!');
     }
 
     // ===================== CÁLCULOS =====================
@@ -708,7 +615,7 @@
                                     <i class="fas ${iconClass}" style="font-size: 1.3rem; color: ${d.pago ? '#6c8dae' : '#2c5a7a'}"></i>
                                     <span>${escapeHtml(d.nome)}</span>
                                 </div>
-                             </td>
+                              </td>
                             <td><span style="background:#f1f5f9; padding:4px 12px; border-radius:20px; font-size:0.8rem;">${iconName}</span></td>
                             <td>${dataFormat}</td>
                             <td>R$ ${d.valor.toFixed(2)}</td>
@@ -720,15 +627,15 @@
                                 <button class="delete-btn" onclick="window.excluirItem('despesa', ${idx})" title="Remover">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
-                             </td>
-                          </tr>`;
+                              </td>
+                           </tr>`;
             });
             tbody.innerHTML = html;
         } 
         else {
             thead.innerHTML = `<tr><th>Descrição</th><th>Tipo</th><th>Data Recebimento</th><th>Valor (R$)</th><th>Status</th><th>Ações</th></tr>`;
             if (receitas.length === 0) {
-                tbody.innerHTML = `<td><td colspan="6" style="text-align:center;">Nenhuma receita cadastrada. Adicione salário ou entrada!</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Nenhuma receita cadastrada. Adicione salário ou entrada!</td></tr>`;
                 return;
             }
             let html = '';
@@ -741,7 +648,7 @@
                             <td style="color:#2c9c5c; font-weight:600;">R$ ${r.valor.toFixed(2)}</td>
                             <td><span class="status-badge" style="background:#e0f2fe; color:#0369a1;">Recebido</span></td>
                             <td><button class="delete-btn" onclick="window.excluirItem('receita', ${idx})" title="Remover receita"><i class="fas fa-trash-alt"></i></button></td>
-                          </tr>`;
+                           </tr>`;
             });
             tbody.innerHTML = html;
         }
@@ -824,8 +731,8 @@
         
         barraSaldoChart = new Chart(ctxBar, {
             type: 'bar',
-            data: { labels: ['Fluxo'], datasets: [{ label: 'Receitas', data: [totalReceitas], backgroundColor: '#3b82f6', borderRadius: 12 }, { label: 'Despesas', data: [totalDespesas], backgroundColor: '#ef4444', borderRadius: 12 }, { label: 'Saldo', data: [saldoLiquido], backgroundColor: '#f59e0b', borderRadius: 12 }] },
-            options: { responsive: true, plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: R$ ${ctx.raw.toFixed(2)}` } } }, scales: { y: { beginAtZero: true, title: { display: true, text: 'R$' } } } }
+            data: { labels: ['Fluxo Financeiro'], datasets: [{ label: 'Receitas', data: [totalReceitas], backgroundColor: '#3b82f6', borderRadius: 12 }, { label: 'Despesas', data: [totalDespesas], backgroundColor: '#ef4444', borderRadius: 12 }, { label: 'Saldo', data: [saldoLiquido], backgroundColor: '#f59e0b', borderRadius: 12 }] },
+            options: { responsive: true, plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: R$ ${ctx.raw.toFixed(2)}` } } }, scales: { y: { beginAtZero: true, title: { display: true, text: 'Valor (R$)' } } } }
         });
     }
 
@@ -849,7 +756,6 @@
     function initEventos() {
         document.getElementById('btnAddDespesa').onclick = adicionarDespesa;
         document.getElementById('btnAddReceita').onclick = adicionarReceita;
-        document.getElementById('btnSaveProfile').onclick = salvarPerfil;
         ['nomeDespesa', 'dataDespesa', 'valorDespesa'].forEach(id => { document.getElementById(id)?.addEventListener('keypress', (e) => { if (e.key === 'Enter') adicionarDespesa(); }); });
         ['nomeReceita', 'dataReceita', 'valorReceita'].forEach(id => { document.getElementById(id)?.addEventListener('keypress', (e) => { if (e.key === 'Enter') adicionarReceita(); }); });
     }
