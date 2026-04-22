@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Finança Pro - Controle com Ícones Visuais</title>
+    <title>Finanças Pro - Controle com Ícones Visuais</title>
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <!-- Font Awesome 6 -->
@@ -14,22 +14,147 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            transition: background-color 0.3s ease, color 0.2s ease, border-color 0.2s ease;
         }
 
-        body {
+        /* Temas */
+        body.light-theme {
             background: #f0f4f8;
             color: #1e293b;
         }
 
-        header {
-            background: linear-gradient(135deg, #0f2b3d 0%, #1e4a6e 100%);
-            padding: 28px 24px;
-            text-align: center;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        body.dark-theme {
+            background: #0f172a;
+            color: #e2e8f0;
         }
 
-        header h1 {
-            font-size: 2rem;
+        /* Header com suporte a tema */
+        body.light-theme header {
+            background: linear-gradient(135deg, #0f2b3d 0%, #1e4a6e 100%);
+        }
+
+        body.dark-theme header {
+            background: linear-gradient(135deg, #020617 0%, #0f172a 100%);
+            border-bottom: 1px solid #334155;
+        }
+
+        body.dark-theme .card-form,
+        body.dark-theme .card-resumo,
+        body.dark-theme .table-wrapper,
+        body.dark-theme .chart-card {
+            background: #1e293b;
+            border-color: #334155;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-theme .card-resumo h3,
+        body.dark-theme .form-title {
+            color: #cbd5e6;
+        }
+
+        body.dark-theme .valor-resumo {
+            color: #f1f5f9;
+        }
+
+        body.dark-theme input,
+        body.dark-theme select {
+            background: #334155;
+            border-color: #475569;
+            color: #f1f5f9;
+        }
+
+        body.dark-theme input::placeholder {
+            color: #94a3b8;
+        }
+
+        body.dark-theme th {
+            background: #0f172a;
+            color: #cbd5e6;
+            border-bottom-color: #334155;
+        }
+
+        body.dark-theme td {
+            border-bottom-color: #334155;
+        }
+
+        body.dark-theme .status-paid {
+            background: #166534;
+            color: #bbf7d0;
+        }
+
+        body.dark-theme .status-pending {
+            background: #7f1d1d;
+            color: #fecaca;
+        }
+
+        body.dark-theme .footer-note {
+            color: #94a3b8;
+            border-top-color: #334155;
+        }
+
+        body.dark-theme .btn-paid-action {
+            background: #2563eb;
+        }
+
+        body.dark-theme .delete-btn:hover {
+            background: #450a0a;
+        }
+
+        /* Correção do fundo dos ícones no tema escuro */
+        body.dark-theme .icon-description i {
+            color: #cbd5e6 !important;
+            background: transparent !important;
+        }
+
+        /* Correção específica para o span de ícone na tabela */
+        body.dark-theme td span[style*="background"] {
+            background: #334155 !important;
+            color: #e2e8f0 !important;
+        }
+
+        /* Corrigir fundo dos badges de ícone */
+        body.dark-theme td span[style*="background:#f1f5f9"] {
+            background: #334155 !important;
+            color: #e2e8f0 !important;
+        }
+
+        /* Garantir que todos os ícones Font Awesome fiquem sem fundo branco */
+        body.dark-theme .fas, 
+        body.dark-theme .far, 
+        body.dark-theme .fab {
+            background: transparent !important;
+        }
+
+        /* Corrigir o fundo da coluna de ícone */
+        body.dark-theme .category-badge {
+            background: #334155 !important;
+            color: #e2e8f0 !important;
+        }
+
+        /* Header com botão de tema no canto direito */
+        header {
+            padding: 20px 24px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .header-title {
+            flex: 1;
+            text-align: center;
+        }
+
+        .header-title h1 {
+            font-size: 1.8rem;
             font-weight: 600;
             color: white;
             display: flex;
@@ -38,10 +163,55 @@
             gap: 12px;
         }
 
-        header p {
-            color: #cbd5e6;
-            margin-top: 8px;
-            font-size: 0.9rem;
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 60px;
+            padding: 8px 18px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(4px);
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .theme-toggle span {
+            font-size: 0.8rem;
+            font-weight: normal;
+        }
+
+        .theme-toggle .sun-icon,
+        .theme-toggle .moon-icon {
+            font-size: 1.2rem;
+        }
+
+        body.light-theme .moon-icon {
+            display: inline-block;
+        }
+
+        body.light-theme .sun-icon {
+            display: none;
+        }
+
+        body.dark-theme .sun-icon {
+            display: inline-block;
+        }
+
+        body.dark-theme .moon-icon {
+            display: none;
+        }
+
+        .header-spacer {
+            width: 110px;
+            visibility: hidden;
         }
 
         .container {
@@ -59,6 +229,10 @@
             flex-wrap: wrap;
         }
 
+        body.dark-theme .tabs {
+            border-bottom-color: #334155;
+        }
+
         .tab-btn {
             background: transparent;
             border: none;
@@ -71,8 +245,8 @@
             transition: all 0.2s;
         }
 
-        .tab-btn i {
-            margin-right: 8px;
+        body.dark-theme .tab-btn {
+            color: #94a3b8;
         }
 
         .tab-btn.active {
@@ -81,9 +255,19 @@
             box-shadow: 0 4px 12px rgba(30, 74, 110, 0.3);
         }
 
+        body.dark-theme .tab-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+
         .tab-btn:not(.active):hover {
             background: #e2edf2;
             color: #0f3b4c;
+        }
+
+        body.dark-theme .tab-btn:not(.active):hover {
+            background: #334155;
+            color: #e2e8f0;
         }
 
         .card-form {
@@ -128,6 +312,10 @@
             font-weight: 700;
             color: #4b6a8b;
             letter-spacing: 0.5px;
+        }
+
+        body.dark-theme .input-group label {
+            color: #94a3b8;
         }
 
         input, select {
@@ -302,7 +490,10 @@
             background-color: #fef9e6;
         }
 
-        /* Ícone visual ao lado da descrição */
+        body.dark-theme .paid-row td:not(:last-child) {
+            background-color: #1e293b;
+        }
+
         .icon-description {
             display: flex;
             align-items: center;
@@ -312,6 +503,20 @@
             font-size: 1.4rem;
             width: 28px;
             text-align: center;
+        }
+
+        /* Estilo para o badge da categoria */
+        .category-badge {
+            background: #f1f5f9;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+
+        body.dark-theme .category-badge {
+            background: #334155;
+            color: #e2e8f0;
         }
 
         .charts-container {
@@ -338,6 +543,10 @@
             color: #2c5a7a;
         }
 
+        body.dark-theme .chart-card h3 {
+            color: #cbd5e6;
+        }
+
         canvas {
             max-height: 260px;
             width: 100%;
@@ -362,30 +571,60 @@
             .tabs {
                 justify-content: center;
             }
+            .header-title h1 {
+                font-size: 1.4rem;
+            }
+            .theme-toggle {
+                padding: 6px 14px;
+            }
+            .theme-toggle span {
+                display: none;
+            }
+            .header-spacer {
+                width: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .theme-toggle {
+                padding: 6px 10px;
+            }
+            .header-spacer {
+                width: 45px;
+            }
         }
     </style>
 </head>
-<body>
+<body class="light-theme">
 <header>
-    <h1>
-        <i class="fas fa-coins"></i> 
-        Finança Pro
-    </h1>
-    <p>Despesas com ícones visuais • Receitas • Gráficos • Controle total</p>
+    <div class="header-content">
+        <div class="header-spacer"></div>
+        <div class="header-title">
+            <h1>
+                <i class="fas fa-coins"></i> 
+                Finanças Pro
+            </h1>
+        </div>
+        <button class="theme-toggle" id="themeToggleBtn">
+            <i class="fas fa-sun sun-icon" style="color: #fbbf24;"></i>
+            <i class="fas fa-moon moon-icon" style="color: #cbd5e6;"></i>
+            <span>Tema</span>
+        </button>
+    </div>
 </header>
 
 <div class="container">
     <div class="resumo-grid">
         <div class="card-resumo card-total-receita">
-            <h3><i class="fas fa-arrow-up"></i> Total Receitas</h3>
+            <h3><i class="fas fa-arrow-up"></i> TOTAL RECEITAS</h3>
             <div class="valor-resumo" id="totalReceitas">R$ 0,00</div>
         </div>
         <div class="card-resumo card-total-despesa">
-            <h3><i class="fas fa-arrow-down"></i> Total Despesas</h3>
+            <h3><i class="fas fa-arrow-down"></i> TOTAL DESPESAS</h3>
             <div class="valor-resumo" id="totalDespesas">R$ 0,00</div>
         </div>
         <div class="card-resumo card-saldo">
-            <h3><i class="fas fa-wallet"></i> Saldo Líquido</h3>
+            <h3><i class="fas fa-wallet"></i> SALDO LÍQUIDO</h3>
             <div class="valor-resumo" id="saldoLiquido">R$ 0,00</div>
         </div>
     </div>
@@ -395,7 +634,6 @@
         <button class="tab-btn" id="tabReceitasBtn"><i class="fas fa-hand-holding-usd"></i> Receitas (Salário/Entradas)</button>
     </div>
 
-    <!-- Formulário Despesas com Ícones -->
     <div class="card-form" id="formDespesas">
         <div class="form-title">
             <i class="fas fa-plus-circle" style="color:#2c9c5c;"></i> 
@@ -415,6 +653,7 @@
                     <option value="fa-wifi">📡 Internet</option>
                     <option value="fa-tv">📺 Netflix / Streaming</option>
                     <option value="fa-car">🚗 Carro / Transporte</option>
+                    <option value="fa-gas-pump">⛽ Combustível</option>
                     <option value="fa-apple-alt">🍎 Supermercado</option>
                     <option value="fa-utensils">🍽️ Alimentação</option>
                     <option value="fa-mobile-alt">📱 Celular</option>
@@ -448,7 +687,6 @@
         </div>
     </div>
 
-    <!-- Formulário Receitas -->
     <div class="card-form" id="formReceitas" style="display:none;">
         <div class="form-title">
             <i class="fas fa-hand-holding-usd" style="color:#3b82f6;"></i> 
@@ -502,6 +740,37 @@
 </div>
 
 <script>
+    // ===================== TEMA CLARO/ESCURO =====================
+    let isDarkTheme = false;
+
+    function toggleTheme() {
+        const body = document.body;
+        if (isDarkTheme) {
+            body.classList.remove('dark-theme');
+            body.classList.add('light-theme');
+            localStorage.setItem('financas_theme', 'light');
+            isDarkTheme = false;
+        } else {
+            body.classList.remove('light-theme');
+            body.classList.add('dark-theme');
+            localStorage.setItem('financas_theme', 'dark');
+            isDarkTheme = true;
+        }
+    }
+
+    function loadTheme() {
+        const savedTheme = localStorage.getItem('financas_theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+            document.body.classList.remove('light-theme');
+            isDarkTheme = true;
+        } else {
+            document.body.classList.add('light-theme');
+            document.body.classList.remove('dark-theme');
+            isDarkTheme = false;
+        }
+    }
+
     // ===================== DADOS GLOBAIS =====================
     let despesas = [];
     let receitas = [];
@@ -510,20 +779,19 @@
     let comparativoChart = null;
     let barraSaldoChart = null;
 
-    // Mapeamento de ícones e nomes amigáveis
     function getIconName(categoriaIcon) {
         const mapa = {
             'fa-home': '🏠 Aluguel', 'fa-bolt': '⚡ Energia', 'fa-tint': '💧 Água',
             'fa-wifi': '📡 Internet', 'fa-tv': '📺 Streaming', 'fa-car': '🚗 Transporte',
-            'fa-apple-alt': '🍎 Mercado', 'fa-utensils': '🍽️ Alimentação', 'fa-mobile-alt': '📱 Celular',
-            'fa-heartbeat': '🏥 Saúde', 'fa-graduation-cap': '📚 Educação', 'fa-dog': '🐶 Pet',
-            'fa-futbol': '⚽ Lazer', 'fa-shopping-cart': '🛒 Compras', 'fa-credit-card': '💳 Cartão',
-            'fa-music': '🎵 Música', 'fa-gamepad': '🎮 Games', 'fa-file-invoice': '📄 Outros'
+            'fa-gas-pump': '⛽ Combustível', 'fa-apple-alt': '🍎 Mercado', 'fa-utensils': '🍽️ Alimentação',
+            'fa-mobile-alt': '📱 Celular', 'fa-heartbeat': '🏥 Saúde', 'fa-graduation-cap': '📚 Educação',
+            'fa-dog': '🐶 Pet', 'fa-futbol': '⚽ Lazer', 'fa-shopping-cart': '🛒 Compras',
+            'fa-credit-card': '💳 Cartão', 'fa-music': '🎵 Música', 'fa-gamepad': '🎮 Games',
+            'fa-file-invoice': '📄 Outros'
         };
         return mapa[categoriaIcon] || '📋 Outros';
     }
 
-    // ===================== STORAGE =====================
     function carregarDados() {
         const storedDespesas = localStorage.getItem('financas_despesas_icones');
         const storedReceitas = localStorage.getItem('financas_receitas_pro');
@@ -537,7 +805,7 @@
                 { nome: "Energia", categoriaIcon: "fa-bolt", data: "2025-03-20", valor: 230.50, pago: false },
                 { nome: "Supermercado", categoriaIcon: "fa-apple-alt", data: "2025-03-05", valor: 780.30, pago: true },
                 { nome: "Água", categoriaIcon: "fa-tint", data: "2025-03-18", valor: 95.00, pago: false },
-                { nome: "Spotify", categoriaIcon: "fa-music", data: "2025-03-22", valor: 21.90, pago: false }
+                { nome: "Combustível", categoriaIcon: "fa-gas-pump", data: "2025-03-22", valor: 320.00, pago: false }
             ];
         }
         
@@ -556,7 +824,6 @@
         localStorage.setItem('financas_receitas_pro', JSON.stringify(receitas));
     }
 
-    // ===================== CÁLCULOS =====================
     function calcularTotais() {
         const totalReceitas = receitas.reduce((acc, r) => acc + r.valor, 0);
         const totalDespesas = despesas.reduce((acc, d) => acc + d.valor, 0);
@@ -579,7 +846,6 @@
         }
     }
 
-    // ===================== RENDERIZAÇÃO TABELA COM ÍCONES VISUAIS =====================
     function escapeHtml(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, function(m) {
@@ -612,11 +878,11 @@
                 html += `<tr class="${rowClass}">
                             <td>
                                 <div class="icon-description">
-                                    <i class="fas ${iconClass}" style="font-size: 1.3rem; color: ${d.pago ? '#6c8dae' : '#2c5a7a'}"></i>
+                                    <i class="fas ${iconClass}" style="font-size: 1.3rem;"></i>
                                     <span>${escapeHtml(d.nome)}</span>
                                 </div>
                               </td>
-                            <td><span style="background:#f1f5f9; padding:4px 12px; border-radius:20px; font-size:0.8rem;">${iconName}</span></td>
+                            <td><span class="category-badge">${iconName}</span></td>
                             <td>${dataFormat}</td>
                             <td>R$ ${d.valor.toFixed(2)}</td>
                             <td><span class="status-badge ${statusClass}">${statusText}</span></td>
@@ -627,8 +893,8 @@
                                 <button class="delete-btn" onclick="window.excluirItem('despesa', ${idx})" title="Remover">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
-                              </td>
-                           </tr>`;
+                            </td>
+                         </tr>`;
             });
             tbody.innerHTML = html;
         } 
@@ -648,13 +914,12 @@
                             <td style="color:#2c9c5c; font-weight:600;">R$ ${r.valor.toFixed(2)}</td>
                             <td><span class="status-badge" style="background:#e0f2fe; color:#0369a1;">Recebido</span></td>
                             <td><button class="delete-btn" onclick="window.excluirItem('receita', ${idx})" title="Remover receita"><i class="fas fa-trash-alt"></i></button></td>
-                           </tr>`;
+                         </tr>`;
             });
             tbody.innerHTML = html;
         }
     }
 
-    // ===================== FUNÇÕES GLOBAIS =====================
     window.togglePagarDespesa = function(index) {
         if (index >= 0 && index < despesas.length) {
             despesas[index].pago = !despesas[index].pago;
@@ -714,7 +979,6 @@
         renderizarTudo();
     }
 
-    // ===================== GRÁFICOS =====================
     function atualizarGraficos() {
         const { totalReceitas, totalDespesas, saldoLiquido } = calcularTotais();
         const ctxPie = document.getElementById('graficoComparativo').getContext('2d');
@@ -742,7 +1006,6 @@
         atualizarGraficos();
     }
 
-    // ===================== CONFIGURAÇÕES =====================
     function configurarAbas() {
         const tabDesp = document.getElementById('tabDespesasBtn');
         const tabRec = document.getElementById('tabReceitasBtn');
@@ -756,11 +1019,14 @@
     function initEventos() {
         document.getElementById('btnAddDespesa').onclick = adicionarDespesa;
         document.getElementById('btnAddReceita').onclick = adicionarReceita;
+        document.getElementById('themeToggleBtn').onclick = toggleTheme;
+        
         ['nomeDespesa', 'dataDespesa', 'valorDespesa'].forEach(id => { document.getElementById(id)?.addEventListener('keypress', (e) => { if (e.key === 'Enter') adicionarDespesa(); }); });
         ['nomeReceita', 'dataReceita', 'valorReceita'].forEach(id => { document.getElementById(id)?.addEventListener('keypress', (e) => { if (e.key === 'Enter') adicionarReceita(); }); });
     }
 
     function init() {
+        loadTheme();
         carregarDados();
         configurarAbas();
         initEventos();
