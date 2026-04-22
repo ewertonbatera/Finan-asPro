@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Finança Pro - Controle de Receitas e Despesas</title>
+    <title>Finança Pro - Controle com Ícones Visuais</title>
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <!-- Font Awesome 6 -->
@@ -38,10 +38,6 @@
             gap: 12px;
         }
 
-        header h1 i {
-            font-size: 2rem;
-        }
-
         header p {
             color: #cbd5e6;
             margin-top: 8px;
@@ -60,6 +56,7 @@
             margin-bottom: 24px;
             border-bottom: 2px solid #e2e8f0;
             padding-bottom: 8px;
+            flex-wrap: wrap;
         }
 
         .tab-btn {
@@ -133,7 +130,7 @@
             letter-spacing: 0.5px;
         }
 
-        input {
+        input, select {
             padding: 12px 16px;
             border-radius: 16px;
             border: 1.5px solid #e2e8f0;
@@ -144,7 +141,7 @@
             width: 100%;
         }
 
-        input:focus {
+        input:focus, select:focus {
             border-color: #2c9c5c;
             box-shadow: 0 0 0 3px rgba(44, 156, 92, 0.2);
         }
@@ -261,7 +258,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 620px;
+            min-width: 700px;
         }
 
         th {
@@ -303,6 +300,72 @@
             text-decoration: line-through;
             opacity: 0.75;
             background-color: #fef9e6;
+        }
+
+        /* Ícone visual ao lado da descrição */
+        .icon-description {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .icon-description i {
+            font-size: 1.4rem;
+            width: 28px;
+            text-align: center;
+        }
+
+        /* Perfil do usuário */
+        .profile-section {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 28px;
+            padding: 24px 28px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .profile-avatar {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #22c55e, #3b82f6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-info input {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            margin-top: 8px;
+        }
+
+        .profile-info input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .profile-info input:focus {
+            border-color: #22c55e;
+        }
+
+        .btn-save-profile {
+            background: #22c55e;
+            color: white;
         }
 
         .charts-container {
@@ -353,6 +416,10 @@
             .tabs {
                 justify-content: center;
             }
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -362,7 +429,7 @@
         <i class="fas fa-coins"></i> 
         Finança Pro
     </h1>
-    <p>Receitas + Despesas • Fluxo de caixa completo • Gráficos inteligentes</p>
+    <p>Despesas com ícones visuais • Receitas • Gráficos • Perfil personalizado</p>
 </header>
 
 <div class="container">
@@ -386,15 +453,39 @@
         <button class="tab-btn" id="tabReceitasBtn"><i class="fas fa-hand-holding-usd"></i> Receitas (Salário/Entradas)</button>
     </div>
 
+    <!-- Formulário Despesas com Ícones -->
     <div class="card-form" id="formDespesas">
         <div class="form-title">
             <i class="fas fa-plus-circle" style="color:#2c9c5c;"></i> 
-            Nova Despesa / Conta a Pagar
+            Nova Despesa com Ícone
         </div>
         <div class="form-row">
             <div class="input-group">
                 <label><i class="fas fa-tag"></i> Descrição</label>
-                <input type="text" id="nomeDespesa" placeholder="Ex: Aluguel, Internet, Luz" autocomplete="off">
+                <input type="text" id="nomeDespesa" placeholder="Ex: Aluguel, Netflix, Energia" autocomplete="off">
+            </div>
+            <div class="input-group">
+                <label><i class="fas fa-icons"></i> Ícone / Categoria</label>
+                <select id="categoriaDespesa">
+                    <option value="fa-home">🏠 Aluguel / Moradia</option>
+                    <option value="fa-bolt">⚡ Energia</option>
+                    <option value="fa-tint">💧 Água</option>
+                    <option value="fa-wifi">📡 Internet</option>
+                    <option value="fa-tv">📺 Netflix / Streaming</option>
+                    <option value="fa-car">🚗 Carro / Transporte</option>
+                    <option value="fa-apple-alt">🍎 Supermercado</option>
+                    <option value="fa-utensils">🍽️ Alimentação</option>
+                    <option value="fa-mobile-alt">📱 Celular</option>
+                    <option value="fa-heartbeat">🏥 Saúde</option>
+                    <option value="fa-graduation-cap">📚 Educação</option>
+                    <option value="fa-dog">🐶 Pet</option>
+                    <option value="fa-futbol">⚽ Lazer</option>
+                    <option value="fa-shopping-cart">🛒 Compras</option>
+                    <option value="fa-credit-card">💳 Cartão</option>
+                    <option value="fa-music">🎵 Spotify / Música</option>
+                    <option value="fa-gamepad">🎮 Games</option>
+                    <option value="fa-file-invoice">📄 Outros</option>
+                </select>
             </div>
             <div class="input-group">
                 <label><i class="fas fa-calendar-alt"></i> Vencimento</label>
@@ -410,8 +501,12 @@
                 </button>
             </div>
         </div>
+        <div style="margin-top: 12px; font-size: 0.7rem; color: #6c8dae;">
+            <i class="fas fa-info-circle"></i> Escolha o ícone que representa sua despesa
+        </div>
     </div>
 
+    <!-- Formulário Receitas -->
     <div class="card-form" id="formReceitas" style="display:none;">
         <div class="form-title">
             <i class="fas fa-hand-holding-usd" style="color:#3b82f6;"></i> 
@@ -441,12 +536,32 @@
     <div class="table-wrapper">
         <table id="dynamicTable">
             <thead id="tableHeader">
-                <tr><th>Descrição</th><th>Data</th><th>Valor (R$)</th><th>Status</th><th>Ações</th></tr>
+                <tr><th>Descrição</th><th>Ícone</th><th>Vencimento</th><th>Valor (R$)</th><th>Status</th><th>Ações</th></tr>
             </thead>
             <tbody id="listaMovimentos">
-                <tr><td colspan="5" style="text-align:center;">Carregando...</td></tr>
+                <tr><td colspan="6" style="text-align:center;">Carregando...</td></tr>
             </tbody>
         </table>
+    </div>
+
+    <!-- SEÇÃO DE PERFIL DO USUÁRIO -->
+    <div class="profile-section" id="profileSection">
+        <div class="profile-header">
+            <div class="profile-avatar" id="userAvatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="profile-info">
+                <h3><i class="fas fa-id-card"></i> Meu Perfil</h3>
+                <input type="text" id="userName" placeholder="Seu nome" style="width: 100%; max-width: 300px;">
+                <input type="email" id="userEmail" placeholder="Seu e-mail (opcional)" style="width: 100%; max-width: 300px; margin-top: 8px;">
+                <div style="margin-top: 12px;">
+                    <button id="btnSaveProfile" class="btn-save-profile"><i class="fas fa-save"></i> Salvar Perfil</button>
+                </div>
+            </div>
+            <div>
+                <small><i class="fas fa-user-check"></i> Seus dados ficam salvos no navegador</small>
+            </div>
+        </div>
     </div>
 
     <div class="charts-container">
@@ -460,7 +575,7 @@
         </div>
     </div>
     <div class="footer-note">
-        <i class="fas fa-database"></i> Dados salvos automaticamente • Marque despesas como pagas e veja os gráficos atualizarem
+        <i class="fas fa-database"></i> Dados salvos automaticamente • Ícones visuais para cada despesa • Seu perfil personalizado
     </div>
 </div>
 
@@ -469,24 +584,40 @@
     let despesas = [];
     let receitas = [];
     let abaAtiva = "despesas";
+    let perfilUsuario = { nome: "", email: "" };
 
-    // Gráficos globais
     let comparativoChart = null;
     let barraSaldoChart = null;
 
+    // Mapeamento de ícones e nomes amigáveis
+    function getIconName(categoriaIcon) {
+        const mapa = {
+            'fa-home': '🏠 Aluguel', 'fa-bolt': '⚡ Energia', 'fa-tint': '💧 Água',
+            'fa-wifi': '📡 Internet', 'fa-tv': '📺 Streaming', 'fa-car': '🚗 Transporte',
+            'fa-apple-alt': '🍎 Mercado', 'fa-utensils': '🍽️ Alimentação', 'fa-mobile-alt': '📱 Celular',
+            'fa-heartbeat': '🏥 Saúde', 'fa-graduation-cap': '📚 Educação', 'fa-dog': '🐶 Pet',
+            'fa-futbol': '⚽ Lazer', 'fa-shopping-cart': '🛒 Compras', 'fa-credit-card': '💳 Cartão',
+            'fa-music': '🎵 Música', 'fa-gamepad': '🎮 Games', 'fa-file-invoice': '📄 Outros'
+        };
+        return mapa[categoriaIcon] || '📋 Outros';
+    }
+
     // ===================== STORAGE =====================
     function carregarDados() {
-        const storedDespesas = localStorage.getItem('financas_despesas_pro');
+        const storedDespesas = localStorage.getItem('financas_despesas_icones');
         const storedReceitas = localStorage.getItem('financas_receitas_pro');
+        const storedPerfil = localStorage.getItem('financas_perfil_usuario');
         
         if (storedDespesas) {
             despesas = JSON.parse(storedDespesas);
         } else {
             despesas = [
-                { nome: "Aluguel", data: "2025-03-10", valor: 1850.00, pago: false },
-                { nome: "Netflix", data: "2025-03-15", valor: 45.90, pago: true },
-                { nome: "Energia", data: "2025-03-20", valor: 230.50, pago: false },
-                { nome: "Supermercado", data: "2025-03-05", valor: 780.30, pago: true }
+                { nome: "Aluguel", categoriaIcon: "fa-home", data: "2025-03-10", valor: 1850.00, pago: false },
+                { nome: "Netflix", categoriaIcon: "fa-tv", data: "2025-03-15", valor: 45.90, pago: true },
+                { nome: "Energia", categoriaIcon: "fa-bolt", data: "2025-03-20", valor: 230.50, pago: false },
+                { nome: "Supermercado", categoriaIcon: "fa-apple-alt", data: "2025-03-05", valor: 780.30, pago: true },
+                { nome: "Água", categoriaIcon: "fa-tint", data: "2025-03-18", valor: 95.00, pago: false },
+                { nome: "Spotify", categoriaIcon: "fa-music", data: "2025-03-22", valor: 21.90, pago: false }
             ];
         }
         
@@ -498,11 +629,24 @@
                 { nome: "Freelance Design", data: "2025-03-12", valor: 850.00 }
             ];
         }
+        
+        if (storedPerfil) {
+            perfilUsuario = JSON.parse(storedPerfil);
+            document.getElementById('userName').value = perfilUsuario.nome || '';
+            document.getElementById('userEmail').value = perfilUsuario.email || '';
+        }
     }
 
     function salvarDados() {
-        localStorage.setItem('financas_despesas_pro', JSON.stringify(despesas));
+        localStorage.setItem('financas_despesas_icones', JSON.stringify(despesas));
         localStorage.setItem('financas_receitas_pro', JSON.stringify(receitas));
+    }
+
+    function salvarPerfil() {
+        perfilUsuario.nome = document.getElementById('userName').value;
+        perfilUsuario.email = document.getElementById('userEmail').value;
+        localStorage.setItem('financas_perfil_usuario', JSON.stringify(perfilUsuario));
+        alert('Perfil salvo com sucesso!');
     }
 
     // ===================== CÁLCULOS =====================
@@ -528,7 +672,7 @@
         }
     }
 
-    // ===================== RENDERIZAÇÃO TABELA =====================
+    // ===================== RENDERIZAÇÃO TABELA COM ÍCONES VISUAIS =====================
     function escapeHtml(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, function(m) {
@@ -544,9 +688,9 @@
         const thead = document.getElementById('tableHeader');
         
         if (abaAtiva === 'despesas') {
-            thead.innerHTML = `<tr><th>Descrição</th><th>Vencimento</th><th>Valor (R$)</th><th>Status</th><th>Ações</th></tr>`;
+            thead.innerHTML = `<tr><th>Descrição</th><th>Ícone</th><th>Vencimento</th><th>Valor (R$)</th><th>Status</th><th>Ações</th></tr>`;
             if (despesas.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Nenhuma despesa cadastrada. Adicione uma!</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Nenhuma despesa cadastrada. Adicione uma!</td></tr>`;
                 return;
             }
             let html = '';
@@ -555,8 +699,17 @@
                 const statusClass = d.pago ? 'status-paid' : 'status-pending';
                 const statusText = d.pago ? 'Pago' : 'Pendente';
                 const rowClass = d.pago ? 'paid-row' : '';
+                const iconClass = d.categoriaIcon || 'fa-file-invoice';
+                const iconName = getIconName(iconClass);
+                
                 html += `<tr class="${rowClass}">
-                            <td><i class="fas ${d.pago ? 'fa-check-circle' : 'fa-exclamation-triangle'}" style="margin-right:8px; color:${d.pago ? '#2c9c5c' : '#ef4444'}"></i> ${escapeHtml(d.nome)}</td>
+                            <td>
+                                <div class="icon-description">
+                                    <i class="fas ${iconClass}" style="font-size: 1.3rem; color: ${d.pago ? '#6c8dae' : '#2c5a7a'}"></i>
+                                    <span>${escapeHtml(d.nome)}</span>
+                                </div>
+                             </td>
+                            <td><span style="background:#f1f5f9; padding:4px 12px; border-radius:20px; font-size:0.8rem;">${iconName}</span></td>
                             <td>${dataFormat}</td>
                             <td>R$ ${d.valor.toFixed(2)}</td>
                             <td><span class="status-badge ${statusClass}">${statusText}</span></td>
@@ -567,33 +720,34 @@
                                 <button class="delete-btn" onclick="window.excluirItem('despesa', ${idx})" title="Remover">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
-                            </td>
-                        </tr>`;
+                             </td>
+                          </tr>`;
             });
             tbody.innerHTML = html;
         } 
         else {
-            thead.innerHTML = `<tr><th>Descrição</th><th>Data Recebimento</th><th>Valor (R$)</th><th>Status</th><th>Ações</th></tr>`;
+            thead.innerHTML = `<tr><th>Descrição</th><th>Tipo</th><th>Data Recebimento</th><th>Valor (R$)</th><th>Status</th><th>Ações</th></tr>`;
             if (receitas.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Nenhuma receita cadastrada. Adicione salário ou entrada!</td></tr>`;
+                tbody.innerHTML = `<td><td colspan="6" style="text-align:center;">Nenhuma receita cadastrada. Adicione salário ou entrada!</td></tr>`;
                 return;
             }
             let html = '';
             receitas.forEach((r, idx) => {
                 const dataFormat = r.data ? new Date(r.data).toLocaleDateString('pt-BR') : 'Sem data';
                 html += `<tr style="background: #fefce8;">
-                            <td><i class="fas fa-arrow-up" style="color:#3b82f6; margin-right:8px;"></i> ${escapeHtml(r.nome)}</td>
+                            <td><div class="icon-description"><i class="fas fa-arrow-up" style="font-size:1.3rem; color:#3b82f6;"></i> ${escapeHtml(r.nome)}</div></td>
+                            <td>💰 Entrada / Salário</td>
                             <td>${dataFormat}</td>
                             <td style="color:#2c9c5c; font-weight:600;">R$ ${r.valor.toFixed(2)}</td>
                             <td><span class="status-badge" style="background:#e0f2fe; color:#0369a1;">Recebido</span></td>
                             <td><button class="delete-btn" onclick="window.excluirItem('receita', ${idx})" title="Remover receita"><i class="fas fa-trash-alt"></i></button></td>
-                        </tr>`;
+                          </tr>`;
             });
             tbody.innerHTML = html;
         }
     }
 
-    // ===================== FUNÇÕES GLOBAIS (window) =====================
+    // ===================== FUNÇÕES GLOBAIS =====================
     window.togglePagarDespesa = function(index) {
         if (index >= 0 && index < despesas.length) {
             despesas[index].pago = !despesas[index].pago;
@@ -618,52 +772,32 @@
         }
     };
 
-    // Adicionar despesa
     function adicionarDespesa() {
         const nome = document.getElementById('nomeDespesa').value.trim();
+        const categoriaIcon = document.getElementById('categoriaDespesa').value;
         const data = document.getElementById('dataDespesa').value;
         const valor = parseFloat(document.getElementById('valorDespesa').value);
         
-        if (!nome) {
-            alert('Por favor, informe a descrição da despesa.');
-            return;
-        }
-        if (!data) {
-            alert('Selecione a data de vencimento.');
-            return;
-        }
-        if (isNaN(valor) || valor <= 0) {
-            alert('Informe um valor válido (maior que zero).');
-            return;
-        }
+        if (!nome) { alert('Informe a descrição da despesa.'); return; }
+        if (!data) { alert('Selecione a data de vencimento.'); return; }
+        if (isNaN(valor) || valor <= 0) { alert('Informe um valor válido.'); return; }
         
-        despesas.push({ nome, data, valor, pago: false });
+        despesas.push({ nome, categoriaIcon, data, valor, pago: false });
         salvarDados();
-        // Limpar campos
         document.getElementById('nomeDespesa').value = '';
         document.getElementById('dataDespesa').value = '';
         document.getElementById('valorDespesa').value = '';
         renderizarTudo();
     }
 
-    // Adicionar receita
     function adicionarReceita() {
         const nome = document.getElementById('nomeReceita').value.trim();
         const data = document.getElementById('dataReceita').value;
         const valor = parseFloat(document.getElementById('valorReceita').value);
         
-        if (!nome) {
-            alert('Por favor, informe a descrição da receita (ex: Salário).');
-            return;
-        }
-        if (!data) {
-            alert('Selecione a data de recebimento.');
-            return;
-        }
-        if (isNaN(valor) || valor <= 0) {
-            alert('Informe um valor válido para a receita.');
-            return;
-        }
+        if (!nome) { alert('Informe a descrição da receita.'); return; }
+        if (!data) { alert('Selecione a data de recebimento.'); return; }
+        if (isNaN(valor) || valor <= 0) { alert('Informe um valor válido.'); return; }
         
         receitas.push({ nome, data, valor });
         salvarDados();
@@ -684,125 +818,51 @@
         
         comparativoChart = new Chart(ctxPie, {
             type: 'doughnut',
-            data: {
-                labels: ['Receitas Totais', 'Despesas Totais'],
-                datasets: [{ 
-                    data: [totalReceitas, totalDespesas], 
-                    backgroundColor: ['#3b82f6', '#ef4444'], 
-                    borderWidth: 2,
-                    borderRadius: 8,
-                    hoverOffset: 10
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: { position: 'bottom' },
-                    tooltip: { callbacks: { label: (ctx) => `${ctx.label}: R$ ${ctx.raw.toFixed(2)}` } }
-                }
-            }
+            data: { labels: ['Receitas', 'Despesas'], datasets: [{ data: [totalReceitas, totalDespesas], backgroundColor: ['#3b82f6', '#ef4444'], borderWidth: 2, borderRadius: 8 }] },
+            options: { responsive: true, plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: (ctx) => `${ctx.label}: R$ ${ctx.raw.toFixed(2)}` } } } }
         });
         
         barraSaldoChart = new Chart(ctxBar, {
             type: 'bar',
-            data: {
-                labels: ['Fluxo Financeiro'],
-                datasets: [
-                    { label: 'Receitas (Entradas)', data: [totalReceitas], backgroundColor: '#3b82f6', borderRadius: 12, barPercentage: 0.6 },
-                    { label: 'Despesas (Saídas)', data: [totalDespesas], backgroundColor: '#ef4444', borderRadius: 12, barPercentage: 0.6 },
-                    { label: 'Saldo Líquido', data: [saldoLiquido], backgroundColor: '#f59e0b', borderRadius: 12, barPercentage: 0.6 }
-                ]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { position: 'top' },
-                    tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: R$ ${ctx.raw.toFixed(2)}` } }
-                },
-                scales: {
-                    y: { 
-                        beginAtZero: true, 
-                        title: { display: true, text: 'Valor (R$)', color: '#475569' },
-                        grid: { color: '#e2e8f0' }
-                    }
-                }
-            }
+            data: { labels: ['Fluxo'], datasets: [{ label: 'Receitas', data: [totalReceitas], backgroundColor: '#3b82f6', borderRadius: 12 }, { label: 'Despesas', data: [totalDespesas], backgroundColor: '#ef4444', borderRadius: 12 }, { label: 'Saldo', data: [saldoLiquido], backgroundColor: '#f59e0b', borderRadius: 12 }] },
+            options: { responsive: true, plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: R$ ${ctx.raw.toFixed(2)}` } } }, scales: { y: { beginAtZero: true, title: { display: true, text: 'R$' } } } }
         });
     }
 
-    // ===================== RENDER TOTAL =====================
     function renderizarTudo() {
         atualizarCards();
         renderizarTabela();
         atualizarGraficos();
     }
 
-    // ===================== CONFIGURAÇÃO DAS ABAS =====================
+    // ===================== CONFIGURAÇÕES =====================
     function configurarAbas() {
         const tabDesp = document.getElementById('tabDespesasBtn');
         const tabRec = document.getElementById('tabReceitasBtn');
         const formDesp = document.getElementById('formDespesas');
         const formRec = document.getElementById('formReceitas');
         
-        tabDesp.addEventListener('click', () => {
-            abaAtiva = 'despesas';
-            tabDesp.classList.add('active');
-            tabRec.classList.remove('active');
-            formDesp.style.display = 'block';
-            formRec.style.display = 'none';
-            renderizarTabela();
-        });
-        
-        tabRec.addEventListener('click', () => {
-            abaAtiva = 'receitas';
-            tabRec.classList.add('active');
-            tabDesp.classList.remove('active');
-            formDesp.style.display = 'none';
-            formRec.style.display = 'block';
-            renderizarTabela();
-        });
+        tabDesp.onclick = () => { abaAtiva = 'despesas'; tabDesp.classList.add('active'); tabRec.classList.remove('active'); formDesp.style.display = 'block'; formRec.style.display = 'none'; renderizarTabela(); };
+        tabRec.onclick = () => { abaAtiva = 'receitas'; tabRec.classList.add('active'); tabDesp.classList.remove('active'); formDesp.style.display = 'none'; formRec.style.display = 'block'; renderizarTabela(); };
     }
 
-    // ===================== EVENTOS INICIAIS =====================
     function initEventos() {
-        const btnAddDespesa = document.getElementById('btnAddDespesa');
-        const btnAddReceita = document.getElementById('btnAddReceita');
-        
-        if (btnAddDespesa) btnAddDespesa.addEventListener('click', adicionarDespesa);
-        if (btnAddReceita) btnAddReceita.addEventListener('click', adicionarReceita);
-        
-        // Enter nos campos de despesa
-        const despInputs = ['nomeDespesa', 'dataDespesa', 'valorDespesa'];
-        despInputs.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) {
-                el.addEventListener('keypress', (e) => { if (e.key === 'Enter') adicionarDespesa(); });
-            }
-        });
-        
-        // Enter nos campos de receita
-        const recInputs = ['nomeReceita', 'dataReceita', 'valorReceita'];
-        recInputs.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) {
-                el.addEventListener('keypress', (e) => { if (e.key === 'Enter') adicionarReceita(); });
-            }
-        });
+        document.getElementById('btnAddDespesa').onclick = adicionarDespesa;
+        document.getElementById('btnAddReceita').onclick = adicionarReceita;
+        document.getElementById('btnSaveProfile').onclick = salvarPerfil;
+        ['nomeDespesa', 'dataDespesa', 'valorDespesa'].forEach(id => { document.getElementById(id)?.addEventListener('keypress', (e) => { if (e.key === 'Enter') adicionarDespesa(); }); });
+        ['nomeReceita', 'dataReceita', 'valorReceita'].forEach(id => { document.getElementById(id)?.addEventListener('keypress', (e) => { if (e.key === 'Enter') adicionarReceita(); }); });
     }
 
-    // ===================== INICIALIZAÇÃO =====================
     function init() {
         carregarDados();
         configurarAbas();
         initEventos();
         renderizarTudo();
-        // Garantir formulário correto
         document.getElementById('formReceitas').style.display = 'none';
-        document.getElementById('formDespesas').style.display = 'block';
     }
     
     init();
 </script>
 </body>
-</html>
+    </html>
