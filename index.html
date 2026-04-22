@@ -106,29 +106,50 @@
             background: transparent !important;
         }
 
-        /* Correção específica para o span de ícone na tabela */
-        body.dark-theme td span[style*="background"] {
-            background: #334155 !important;
-            color: #e2e8f0 !important;
-        }
-
-        /* Corrigir fundo dos badges de ícone */
-        body.dark-theme td span[style*="background:#f1f5f9"] {
-            background: #334155 !important;
-            color: #e2e8f0 !important;
-        }
-
-        /* Garantir que todos os ícones Font Awesome fiquem sem fundo branco */
         body.dark-theme .fas, 
         body.dark-theme .far, 
         body.dark-theme .fab {
             background: transparent !important;
         }
 
-        /* Corrigir o fundo da coluna de ícone */
+        .category-badge {
+            background: #f1f5f9;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+
         body.dark-theme .category-badge {
-            background: #334155 !important;
+            background: #334155;
+            color: #e2e8f0;
+        }
+
+        /* CORREÇÃO: Estilo para linhas de receita - texto preto no tema claro */
+        .receita-row {
+            background: #fefce8;
+        }
+        
+        body.light-theme .receita-row td {
+            color: #1e293b !important;
+        }
+        
+        body.dark-theme .receita-row {
+            background: #2d2d2d;
+        }
+        
+        body.dark-theme .receita-row td {
             color: #e2e8f0 !important;
+        }
+        
+        /* Garantir que o texto da receita fique escuro/legível */
+        .receita-row .icon-description span,
+        .receita-row .icon-description i {
+            color: inherit;
+        }
+
+        body.light-theme .receita-row .icon-description span {
+            color: #1e293b !important;
         }
 
         /* Header com botão de tema no canto direito */
@@ -505,20 +526,6 @@
             text-align: center;
         }
 
-        /* Estilo para o badge da categoria */
-        .category-badge {
-            background: #f1f5f9;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            display: inline-block;
-        }
-
-        body.dark-theme .category-badge {
-            background: #334155;
-            color: #e2e8f0;
-        }
-
         .charts-container {
             display: flex;
             flex-wrap: wrap;
@@ -740,6 +747,14 @@
 </div>
 
 <script>
+    // ===================== FUNÇÃO PARA FORMATAR MOEDA (PONTO MILHAR + VÍRGULA CENTAVOS) =====================
+    function formatarMoeda(valor) {
+        return valor.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
     // ===================== TEMA CLARO/ESCURO =====================
     let isDarkTheme = false;
 
@@ -833,10 +848,10 @@
 
     function atualizarCards() {
         const { totalReceitas, totalDespesas, saldoLiquido } = calcularTotais();
-        document.getElementById('totalReceitas').innerHTML = `R$ ${totalReceitas.toFixed(2)}`;
-        document.getElementById('totalDespesas').innerHTML = `R$ ${totalDespesas.toFixed(2)}`;
+        document.getElementById('totalReceitas').innerHTML = `R$ ${formatarMoeda(totalReceitas)}`;
+        document.getElementById('totalDespesas').innerHTML = `R$ ${formatarMoeda(totalDespesas)}`;
         const saldoElem = document.getElementById('saldoLiquido');
-        saldoElem.innerHTML = `R$ ${saldoLiquido.toFixed(2)}`;
+        saldoElem.innerHTML = `R$ ${formatarMoeda(saldoLiquido)}`;
         if (saldoLiquido >= 0) {
             saldoElem.classList.add('saldo-positivo');
             saldoElem.classList.remove('saldo-negativo');
@@ -884,7 +899,7 @@
                               </td>
                             <td><span class="category-badge">${iconName}</span></td>
                             <td>${dataFormat}</td>
-                            <td>R$ ${d.valor.toFixed(2)}</td>
+                            <td>R$ ${formatarMoeda(d.valor)}</td>
                             <td><span class="status-badge ${statusClass}">${statusText}</span></td>
                             <td style="display: flex; gap: 8px; justify-content: center;">
                                 <button class="btn-paid-action" onclick="window.togglePagarDespesa(${idx})" title="${d.pago ? 'Desmarcar pagamento' : 'Marcar como paga'}">
@@ -907,14 +922,14 @@
             let html = '';
             receitas.forEach((r, idx) => {
                 const dataFormat = r.data ? new Date(r.data).toLocaleDateString('pt-BR') : 'Sem data';
-                html += `<tr style="background: #fefce8;">
+                html += `<tr class="receita-row">
                             <td><div class="icon-description"><i class="fas fa-arrow-up" style="font-size:1.3rem; color:#3b82f6;"></i> ${escapeHtml(r.nome)}</div></td>
                             <td>💰 Entrada / Salário</td>
                             <td>${dataFormat}</td>
-                            <td style="color:#2c9c5c; font-weight:600;">R$ ${r.valor.toFixed(2)}</td>
+                            <td style="color:#2c9c5c; font-weight:600;">R$ ${formatarMoeda(r.valor)}</td>
                             <td><span class="status-badge" style="background:#e0f2fe; color:#0369a1;">Recebido</span></td>
                             <td><button class="delete-btn" onclick="window.excluirItem('receita', ${idx})" title="Remover receita"><i class="fas fa-trash-alt"></i></button></td>
-                         </tr>`;
+                          </tr>`;
             });
             tbody.innerHTML = html;
         }
@@ -990,13 +1005,13 @@
         comparativoChart = new Chart(ctxPie, {
             type: 'doughnut',
             data: { labels: ['Receitas', 'Despesas'], datasets: [{ data: [totalReceitas, totalDespesas], backgroundColor: ['#3b82f6', '#ef4444'], borderWidth: 2, borderRadius: 8 }] },
-            options: { responsive: true, plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: (ctx) => `${ctx.label}: R$ ${ctx.raw.toFixed(2)}` } } } }
+            options: { responsive: true, plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: (ctx) => `R$ ${formatarMoeda(ctx.raw)}` } } } }
         });
         
         barraSaldoChart = new Chart(ctxBar, {
             type: 'bar',
             data: { labels: ['Fluxo Financeiro'], datasets: [{ label: 'Receitas', data: [totalReceitas], backgroundColor: '#3b82f6', borderRadius: 12 }, { label: 'Despesas', data: [totalDespesas], backgroundColor: '#ef4444', borderRadius: 12 }, { label: 'Saldo', data: [saldoLiquido], backgroundColor: '#f59e0b', borderRadius: 12 }] },
-            options: { responsive: true, plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: R$ ${ctx.raw.toFixed(2)}` } } }, scales: { y: { beginAtZero: true, title: { display: true, text: 'Valor (R$)' } } } }
+            options: { responsive: true, plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: R$ ${formatarMoeda(ctx.raw)}` } } }, scales: { y: { beginAtZero: true, title: { display: true, text: 'Valor (R$)' }, ticks: { callback: (value) => `R$ ${formatarMoeda(value)}` } } } }
         });
     }
 
